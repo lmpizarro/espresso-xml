@@ -5,8 +5,11 @@ from __future__ import division
 import os
 import sys
 
+
+
+# Sets de qeXml lib path
 qeXmlLibPath = os.path.abspath(
-    '/home/lmpizarro/python/djangoApps/soundFxDb/qeXml/lib')
+    '../../lib')
 sys.path.append(qeXmlLibPath)
 
 import xmlQe as xq
@@ -42,14 +45,14 @@ k_points = {'type': 'tpiba', 'npoints': 10, 'text': '''
 
 def example01(diag):
 
+
     PSEUDODIR = '/home/lmpizarro/python/materiales/espresso-5.2.1/atomic/examples/pseudo-LDA-0.5/'
+    ROOT_CALCS = os.getenv('HOME') + '/python/materiales/espresso/'
+    NP = 2
 
     PREFIX = 'silicon%s'%diag
 
-    root_calc = os.getenv('HOME')
-
-    calc_dir = '/python/materiales/espresso/' + PREFIX
-    OUTDIR = os.path.abspath(root_calc + '/' + calc_dir + '/')
+    OUTDIR = os.path.abspath(ROOT_CALCS + '/' + PREFIX + '/')
 
     if os.path.isdir(OUTDIR) == False:
         os.makedirs(OUTDIR)
@@ -94,8 +97,18 @@ def example01(diag):
 
     QExmlTree = xq.createXML(in_d)
 
-    xq.writeQe(QExmlTree, 'si.scf.%s.xml'%diag)
 
+    xmlFileName = 'si.scf.%s.xml'%diag
+    xq.writeQe(QExmlTree, OUTDIR + '/' + xmlFileName)
+
+    command = 'mpirun -np %d pw.x -i '% NP + xmlFileName 
+
+    f = open(OUTDIR + '/' + 'command.sh', 'w')
+
+    f.writelines(command)
+
+    f.close()
+    
 
 if __name__ == '__main__':
     diago=['cg', 'david']
