@@ -98,14 +98,15 @@ def example01(diag):
     QExmlTree = xq.createXML(in_d)
 
 
-    xmlFileName = 'si.scf.%s.xml'%diag
-    xq.writeQe(QExmlTree, OUTDIR + '/' + xmlFileName)
+    inFileName = 'si.scf.%s.xml'%diag
+    outFile = 'si.scf.%s.out'%diag
+    xq.writeQe(QExmlTree, OUTDIR + '/' + inFileName)
 
-    command = 'mpirun -np %d pw.x -i '% NP + xmlFileName 
+    commandLine = 'mpirun -np %d pw.x -i %s  > %s'% (NP, inFileName, outFile ) 
 
     f = open(OUTDIR + '/' + 'command.sh', 'w')
 
-    f.writelines(command)
+    f.writelines(commandLine)
 
     f.close()
     
