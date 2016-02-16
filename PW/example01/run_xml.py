@@ -4,15 +4,7 @@ from __future__ import division
 
 import os
 import sys
-
-
-
-# Sets de qeXml lib path
-qeXmlLibPath = os.path.abspath(
-    '../../lib')
-sys.path.append(qeXmlLibPath)
-
-import xmlQe as xq
+import qeXml as xq
 
 
 def setFields(fd):

@@ -5,11 +5,7 @@ from __future__ import division
 import os
 import sys
 
-qeXmlLibPath = os.path.abspath(
-    '/home/lmpizarro/python/djangoApps/soundFxDb/qeXml/lib')
-sys.path.append(qeXmlLibPath)
-
-import xmlQe as xq
+import qeXml as xq
 
 
 def setFields(fd):
