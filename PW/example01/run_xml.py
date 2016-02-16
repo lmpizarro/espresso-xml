@@ -5,7 +5,7 @@ from __future__ import division
 import os
 import sys
 import qeXml as xq
-from qeXml import commands
+import qeXml.commands as cm
 
 
 def setFields(fd):
@@ -39,14 +39,19 @@ k_points = {'type': 'tpiba', 'npoints': 10, 'text': '''
 def example01(diag):
 
 
-    PSEUDODIR = '/home/lmpizarro/python/materiales/espresso-5.2.1/atomic/examples/pseudo-LDA-0.5/'
-    ROOT_CALCS = os.getenv('HOME') + '/python/materiales/espresso/'
+    BASE_DIR = '/opt/lmpizarro/python/'
+    PSEUDODIR = BASE_DIR + 'espresso-5.3.0/pseudo/'
+    HOME_CALCS = BASE_DIR +  'qeCalcs/'
+    BIN_PATH = BASE_DIR +  'espresso-5.3.0/bin'
     # Number of processor for mpi calcs
     NP = 2
 
     PREFIX = 'silicon%s'%diag
 
-    OUTDIR = os.path.abspath(ROOT_CALCS + '/' + PREFIX + '/')
+    OUTDIR = os.path.abspath(HOME_CALCS + '/' + PREFIX + '/')
+
+    inFileName = 'si.scf.%s.xml'%diag
+    outFileName = 'si.scf.%s.out'%diag
 
     if os.path.isdir(OUTDIR) == False:
         os.makedirs(OUTDIR)
@@ -72,7 +77,7 @@ def example01(diag):
 
     (inout, nums, opts) = setFields(fd)
 
-    especies = [{'name': 'Si', 'pseudofile': 'Si.pz-vbc.UPF', 'mass': 28.086}]
+    especies = [{'name': 'Si', 'pseudofile': 'Si.rel-pbe-rrkj.UPF', 'mass': 28.086}]
 
     ae_d = xq.setAtomicSpecies(especies)
 
@@ -89,14 +94,14 @@ def example01(diag):
     in_d = xq.setInput('scf', PREFIX, [
         ce_d, ae_d, al_d, inout, nums, opts, k_p_d])
 
+    # Create the xml tree
     QExmlTree = xq.createXML(in_d)
-
-
-    inFileName = 'si.scf.%s.xml'%diag
-    outFileName = 'si.scf.%s.out'%diag
+    # Write the xml file
     xq.writeQe(QExmlTree, OUTDIR + '/' + inFileName)
 
-    commandLine = commands.mpiCommand(NP, inFileName, outFileName, OUTDIR)
+
+    rqe = cm.RunQe(BIN_PATH, NP, OUTDIR)
+    rqe.writeMpiScript(inFileName, outFileName)
 
 
 if __name__ == '__main__':

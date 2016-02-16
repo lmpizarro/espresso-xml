@@ -22,7 +22,6 @@ def createXML(in_d):
 def writeQe(inp_, filename):
     str_ = '<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n'
     str_ += (etree.tounicode(inp_, pretty_print=True))
-    print str_
 
     f = open(filename, 'w')
 
