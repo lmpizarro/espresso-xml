@@ -44,11 +44,15 @@ def example01(diag):
     HOME_CALCS = BASE_DIR +  'qeCalcs/'
     BIN_PATH = BASE_DIR +  'espresso-5.3.0/bin'
     # Number of processor for mpi calcs
-    NP = 2
+    NP = 1
 
     PREFIX = 'silicon%s'%diag
 
     OUTDIR = os.path.abspath(HOME_CALCS + '/' + PREFIX + '/')
+
+    # An object to generate commands to run qe
+    rqe = cm.RunQe(BIN_PATH, NP, OUTDIR)
+
 
     inFileName = 'si.scf.%s.xml'%diag
     outFileName = 'si.scf.%s.out'%diag
@@ -100,7 +104,6 @@ def example01(diag):
     xq.writeQe(QExmlTree, OUTDIR + '/' + inFileName)
 
 
-    rqe = cm.RunQe(BIN_PATH, NP, OUTDIR)
     rqe.writeMpiScript(inFileName, outFileName)
 
 
