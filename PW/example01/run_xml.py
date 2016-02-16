@@ -5,6 +5,7 @@ from __future__ import division
 import os
 import sys
 import qeXml as xq
+from qeXml import commands
 
 
 def setFields(fd):
@@ -40,6 +41,7 @@ def example01(diag):
 
     PSEUDODIR = '/home/lmpizarro/python/materiales/espresso-5.2.1/atomic/examples/pseudo-LDA-0.5/'
     ROOT_CALCS = os.getenv('HOME') + '/python/materiales/espresso/'
+    # Number of processor for mpi calcs
     NP = 2
 
     PREFIX = 'silicon%s'%diag
@@ -91,17 +93,11 @@ def example01(diag):
 
 
     inFileName = 'si.scf.%s.xml'%diag
-    outFile = 'si.scf.%s.out'%diag
+    outFileName = 'si.scf.%s.out'%diag
     xq.writeQe(QExmlTree, OUTDIR + '/' + inFileName)
 
-    commandLine = 'mpirun -np %d pw.x -i %s  > %s'% (NP, inFileName, outFile ) 
+    commandLine = commands.mpiCommand(NP, inFileName, outFileName, OUTDIR)
 
-    f = open(OUTDIR + '/' + 'command.sh', 'w')
-
-    f.writelines(commandLine)
-
-    f.close()
-    
 
 if __name__ == '__main__':
     diago=['cg', 'david']
