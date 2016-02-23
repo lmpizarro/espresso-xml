@@ -10,16 +10,16 @@ class RunQe:
         self.OUTDIR = outdir
     
 
-    def getMpiCommandLine (self, inFileName, outFileName):
-        pw_bin = self.path_binaries + '/pw.x'
+    def getMpiCommandLine (self, inFileName, outFileName, pgm):
+        pw_bin = self.path_binaries + '/' + pgm
         if self.NP > 1:
-            return 'mpirun -np %d %s -i %s  > %s'% (self.NP, pw_bin, inFileName, outFileName)
+            return 'mpirun -np %d %s -i %s  > %s \n'% (self.NP, pw_bin, inFileName, outFileName)
         else:
             return '%s -i %s  > %s'% (pw_bin, inFileName, outFileName)
 
 
-    def writeMpiScript(self, inFileName, outFileName):
-        commandLine = self.getMpiCommandLine(inFileName, outFileName)
+    def writeMpiScript(self, inFileName, outFileName, pgm='pw.x'):
+        commandLine = self.getMpiCommandLine(inFileName, outFileName, pgm)
 
         f = open(self.OUTDIR + '/' + 'command.sh', 'w')
 

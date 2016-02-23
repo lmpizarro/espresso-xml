@@ -109,7 +109,7 @@ def example01():
     xq.writeQe(QExmlTree, OUTDIR + '/' + inFileName)
 
 
-    rqe.writeMpiScript(inFileName, outFileName)
+    rqe.writeMpiScript(inFileName, outFileName, 'cp.x')
 
 
 if __name__ == '__main__':
