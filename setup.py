@@ -29,7 +29,7 @@ setup(name='qeXml',
         "Topic :: Scientific/Engineering :: Physics",
         ],
     install_requires=[
-        'lxml'],
+        'lxml', 'pandas'],
     zip_safe=False)
 
 

@@ -7,7 +7,7 @@ import sys
 import qeXml as xq
 import qeXml.commands as cm
 
-def example01():
+def example01(nstep):
 
     BASE_DIR = '/opt/lmpizarro/python/'
     PSEUDODIR = BASE_DIR + 'espresso-5.3.0/pseudo/'
@@ -54,7 +54,7 @@ def example01():
         'nspin': 1
     },
         'cp': {
-        'nstep': 100,
+        'nstep': nstep,
         'dt': 5.0,
         'ion_dynamics': 'none',
         'isave': 20,
@@ -113,5 +113,5 @@ def example01():
 
 
 if __name__ == '__main__':
-    example01()
+    example01(200)
 
