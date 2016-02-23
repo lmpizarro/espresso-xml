@@ -21,14 +21,9 @@ class Qsub(object):
     export NUM_PROCS 
     export NUM_NODES
 
-
-    HOME_CALC=''
-    OUT_FILE=''
-    IN_FILE=''
     BIN_EXE=''
 
-    bin=$BIN_EXE" -i "$HOME_CALC$IN_FILE" > "$HOME_CALC$OUT_FILE
-    /home/pizarro/opt/openmpi-1.8.1-gcc/bin/mpirun -machinefile $PBS_O_WORKDIR/$PBS_JOBID.machines -np $NUM_PROCS $bin'''
+    /home/pizarro/opt/openmpi-1.8.1-gcc/bin/mpirun -machinefile $PBS_O_WORKDIR/$PBS_JOBID.machines -np $NUM_PROCS $BIN_EXE'''
 
     def __init__(self, name, nodes, in_file, out_file, bin_exe, run_path):
         self.name = name
@@ -38,17 +33,10 @@ class Qsub(object):
         self.bin_exe = bin_exe
         self.out_file = out_file 
 
-        self.qsub_split = qsub.split('\n')
+        self.qsub_split = self.qsub.split('\n')
         self.qsub_split[0] ="#PBS -N %s"%self.name  
         self.qsub_split[1] ="#PBS -l nodes=%d:ppn=2"%self.nodes  
-        self.qsub_split[21] ="HOME_CALC=%s/"%self.run_path
-        self.qsub_split[22] ="OUT_FILE=%s"%self.out_file
-        self.qsub_split[23] ="IN_FILE=%s"%self.in_file
-        self.qsub_split[24] ="BIN_EXE=%s"%self.bin_exe
-
-    def set_run_path(self, p):
-        self.run_path = p 
-        self.qsub_split[21] ="HOME_CALC=%s/"%self.run_path
+        self.qsub_split[20] ='BIN_EXE="%s"'%self.bin_exe
 
     def gen_file(self):
         self.file_content = ""
@@ -73,7 +61,7 @@ class RunQe:
     def getMpiCommandLine (self, inFileName, outFileName, pgm):
         pw_bin = self.path_binaries + '/' + pgm
         if self.NP > 1:
-            return 'mpirun -np %d %s -i %s  > %s \n'% (self.NP, pw_bin, inFileName, outFileName)
+            return '%s -i %s  > %s'% (pw_bin, inFileName, outFileName)
         else:
             return '%s -i %s  > %s'% (pw_bin, inFileName, outFileName)
 
@@ -89,6 +77,6 @@ class RunQe:
 
 
         # name, nodes, in_file, out_file, bin_exe, run_path):
-        qs = Qsub(inFileName, self.NP, outFileName, commandLine, self.OUTDIR)
+        qs = Qsub(inFileName, self.NP, inFileName, outFileName, commandLine, self.OUTDIR)
         qs.gen_file()
  
