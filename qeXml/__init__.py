@@ -41,6 +41,7 @@ def getDict(element, attrib, elements, text=''):
 
 # field Options
 
+
 class Field:
     types = {}
 
@@ -101,16 +102,17 @@ class Options(Field):
     def getField(self, params):
         return getDict('field', {'name': 'Options'}, self.getVals(params))
 
+
 class MD(Field):
     types = {
-        'dt':'real',
-	'nstep':'integer',
-        'pot_extrapolation':'string',
-        'wfc_extrapolation':'string'
+        'dt': 'real',
+        'nstep': 'integer',
+        'pot_extrapolation': 'string',
+        'wfc_extrapolation': 'string'
     }
+
     def getField(self, params):
         return getDict('field', {'name': 'MD'}, self.getVals(params))
-
 
 
 # field  InputOuput
@@ -151,9 +153,11 @@ def setStartingWfc(val):
     str_d = getDict('string', {}, [], val)
     return getDict('parameter', {'name': 'startingwfc'}, [str_d])
 
+
 def setDisk_Io(val):
     str_d = getDict('string', {}, [], val)
     return getDict('parameter', {'name': 'disk_io'}, [str_d])
+
 
 class InputOutput:
 
@@ -179,7 +183,6 @@ class InputOutput:
                 list_r.append(setStartingWfc(dict_[k]))
             elif k == 'disk_io':
                 list_r.append(setDisk_Io(dict_[k]))
-
 
         return list_r
 
@@ -242,6 +245,7 @@ def setNoSym(bool_):
     thr_ = str(bool_)
     str_d = getDict('logical', {}, [], thr_)
     return getDict('parameter', {'name': 'nosym'}, [str_d])
+
 
 class Numerics:
 
@@ -348,17 +352,17 @@ def setK_points(k_points):
         raise qeError('k_points bad type %s' % type_)
     else:
         if type_ == 'automatic':
-            int_ = getDict('integer', {'rank': '1', 'n1': '6'}, [], k_points['text'])
+            int_ = getDict(
+                'integer', {'rank': '1', 'n1': '6'}, [], k_points['text'])
             m = getDict('mesh', {}, [int_])
             k_p_d = getDict('k_points',  {'type': type_}, [m])
         elif type_ == 'tpiba':
-            int_ = getDict('real', {'rank': '2', 'n1': '4', 'n2':  str(k_points['npoints'])}, [], k_points['text'])
+            int_ = getDict('real', {'rank': '2', 'n1': '4', 'n2':  str(
+                k_points['npoints'])}, [], k_points['text'])
             m = getDict('mesh', {'npoints': str(k_points['npoints'])}, [int_])
             k_p_d = getDict('k_points',  {'type': type_}, [m])
 
-
     return k_p_d
-
 
 
 def setFields(fd):
@@ -375,7 +379,6 @@ def setFields(fd):
     fopts = opts.getField(fd_opts)
 
     return (fios, fnums, fopts)
-
 
 
 def test_scf():
@@ -405,11 +408,12 @@ def test_scf():
 
     ae_d = setAtomicSpecies(especies)
 
-    k_points = {'type':'automatic','text':'1 1 1 1 1 1'}
+    k_points = {'type': 'automatic', 'text': '1 1 1 1 1 1'}
 
     k_p_d = setK_points(k_points)
 
-    positions = [{'name':'Si', 'position':[0.0, 0.0, 0.0]}, {'name':'Al', 'position':[0.25, 0.25, 0.25]}]
+    positions = [{'name': 'Si', 'position': [0.0, 0.0, 0.0]},
+                 {'name': 'Al', 'position': [0.25, 0.25, 0.25]}]
     pos_si1 = setPosition(positions[0])
     pos_si2 = setPosition(positions[1])
 
@@ -424,22 +428,24 @@ def test_scf():
 
     writeQe(QExmlTree, 'si.xml')
 
-
+MIN_LINE_LEN = 14
 def readPositions(filename):
     f = open(filename)
     pos_l = f.readlines()
     f.close()
-    pos = []
 
+    pos = []
     for l in pos_l:
-        s = l.split()
-	pos_d ={'name': s[0], 'position': [s[1], s[2], s[3]]}
-        pos.append(setPosition(pos_d))
+        if len(l) > MIN_LINE_LEN:
+           s = l.split()
+           pos_d = {'name': s[0], 'position': [s[1], s[2], s[3]]}
+           pos.append(setPosition(pos_d))
 
     return pos
 
 
 import os
+
 
 def test_cp():
     prefix = 'sio2cp'
@@ -447,7 +453,7 @@ def test_cp():
     root_calc = os.getenv('HOME')
 
     calc_dir = '/python/materiales/espresso/' + prefix
-    calc_path = os.path.abspath(root_calc + '/' + calc_dir +'/')
+    calc_path = os.path.abspath(root_calc + '/' + calc_dir + '/')
 
     if os.path.isdir(calc_path) == False:
         os.makedirs(calc_path)
