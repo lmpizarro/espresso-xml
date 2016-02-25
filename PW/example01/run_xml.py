@@ -3,15 +3,11 @@
 from __future__ import division
 
 import os
-import sys
 import qeXml as xq
 import qeXml.commands as cm
 
 
 def setFields(fd):
-
-    fd_num = fd['numerics']
-    fd_io = fd['inputoutput']
     fd_opts = fd['options']
 
     nums = xq.Numerics()

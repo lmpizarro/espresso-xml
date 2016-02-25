@@ -3,7 +3,6 @@
 from __future__ import division
 
 import os
-import sys
 import qeXml as xq
 import qeXml.commands as cm
 

@@ -3,15 +3,10 @@
 from __future__ import division
 
 import os
-import sys
-
 import qeXml as xq
 
 
 def setFields(fd):
-
-    fd_num = fd['numerics']
-    fd_io = fd['inputoutput']
     fd_md = fd['md']
 
     nums = xq.Numerics()

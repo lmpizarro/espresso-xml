@@ -366,9 +366,6 @@ def setK_points(k_points):
 
 
 def setFields(fd):
-
-    fd_num = fd['numerics']
-    fd_io = fd['inputoutput']
     fd_opts = fd['options']
 
     nums = Numerics()
